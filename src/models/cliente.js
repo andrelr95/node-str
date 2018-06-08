@@ -3,16 +3,53 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const schema = new Schema({
-    id: {
-        type: Number,
-        required: true,
-        trim: true
-    },
-    pessoa: {
+const enderecoSchema = new Schema({
         id: {
             type: Number,
             required: true,
+            trim: true
+        },
+        cep: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        estado: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        cidade: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        bairro: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        logradouro: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        numero: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        complemento: {
+            type: String,
+            required: true,
+            trim: true
+        }
+    });
+
+const pessoaSchema = new Schema({
+        id: {
+            type: Number,
+            required: false,
             trim: true
         },
         nome: {
@@ -45,51 +82,23 @@ const schema = new Schema({
             required: true,
             trim: true
         },
-        enderecos: [
-            {
-                id: {
-                    type: Number,
-                    required: true,
-                    trim: true
-                },
-                estado: {
-                    type: String,
-                    required: true,
-                    trim: true
-                },
-                cidade: {
-                    type: String,
-                    required: true,
-                    trim: true
-                },
-                bairro: {
-                    type: String,
-                    required: true,
-                    trim: true
-                },
-                logradouro: {
-                    type: String,
-                    required: true,
-                    trim: true
-                },
-                numero: {
-                    type: String,
-                    required: true,
-                    trim: true
-                },
-                complemento: {
-                    type: String,
-                    required: true,
-                    trim: true
-                }
-            }
-        ],
+        enderecos: [enderecoSchema],
         dataNasc: {
             type: String,
             required: true,
             trim: true
         }
-    }
-});
+})
 
+
+const schema = new Schema({
+    cliente: { 
+        id: {
+            type: Number,
+            required: false,
+            trim: true
+        },
+        pessoa: pessoaSchema
+    }
+})
 module.exports = mongoose.model('Cliente', schema);
