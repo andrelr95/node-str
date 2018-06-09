@@ -30,5 +30,6 @@ exports.delete = async(id) => {
 
 exports.create = async(body) => {
     let cliente = new Cliente(body);
-    await cliente.save()
+    const res = await cliente.save();
+    return res._id;
 }

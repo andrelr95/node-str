@@ -4,11 +4,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const enderecoSchema = new Schema({
-        id: {
-            type: Number,
-            required: true,
-            trim: true
-        },
         cep: {
             type: String,
             required: true,
@@ -47,11 +42,6 @@ const enderecoSchema = new Schema({
     });
 
 const pessoaSchema = new Schema({
-        id: {
-            type: Number,
-            required: false,
-            trim: true
-        },
         nome: {
             type: String,
             required: true,
