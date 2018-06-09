@@ -2,55 +2,53 @@
 
 const mongoose = require('mongoose');
 const Cliente = mongoose.model('Cliente');
+const repository = require('../repositories/cliente-repository');
 
 exports.post = (req, res, next) => {
-    let cliente = new Cliente(req.body);
-    cliente
-        .save()
+    repository.create(req.body)
         .then(x => {
-            res.status(201).send({message: 'Produto registrado com sucesso'});
+            res.status(201).send({message: 'Cliente cadastrado com sucesso'});
         }).catch(e => {
-            res.status(400).send({message: 'Falha ao cadastrar o produto', data: e});
+            res.status(400).send({message: 'Falha ao cadastrar o cliente', data: e});
         });
     };
 
-exports.get = (req, res, next) => {
-    Cliente.find()
-        .then(payload => {
-            res.status(200).send(payload);
-        })
-        .catch(err => {
-            res.status(400).send(err);
-        })
+exports.get = async(req, res, next) => {
+    try {
+        let body = await repository.get();
+        let responseBody = new Object();
+        responseBody.clientes = body;
+        res.status(200).send(responseBody);    
+    } catch(err) {
+        res.status(500).send(err);
+    }
 };
 
-exports.getById = (req, res, next) => {
-    Cliente.findById(req.params.id)
-    .then(payload => {
-        res.status(200).send(payload);
-    }).catch(e => {
-        res.status(400).send(err);
-    });
+exports.getById = async(req, res, next) => {
+    try{
+        let body = await repository.getById(req.params.id);
+        let responseBody = new Object();
+        responseBody.cliente = body;
+        res.status(200).send(responseBody);
+    } catch(err) {
+        res.status(404).send(err);
+    }
 };
 
-exports.put = (req, res, next) => {
-    Cliente.findByIdAndUpdate(req.params.id, {
-        $set: {
-            cliente: req.body.cliente
-        }
-    }).then(payload => {
-        res.status(200).send({ message: 'Produto atualizado com sucesso'});
-    }).catch(e => {
+exports.put = async(req, res, next) => {
+    try{
+        await repository.update(req.params.id, req.body.pessoa);
+        res.status(200).send({ message: 'Cliente atualizado com sucesso'});
+    } catch(err) {
         res.status(400).send({ message: 'Falha ao atualizar produto'}, e);
-    })
+    }
 };
 
-exports.delete = (req, res, next) => {
-    Cliente.findOneAndRemove(req.params.id)
-        .then(payload => {
-            res.status(200).send( { message: 'Cliente removido com sucesso'});
-        })
-        .catch(err => {
-            res.status(400).send({message : 'Falha ao remover cliente',  data: err});
-        })
+exports.delete = async(req, res, next) => {
+    try{
+        await repository.delete(req.params.id);
+        res.status(200).send( { message: 'Cliente removido com sucesso'});
+    } catch(err) {
+        res.status(400).send({message : 'Falha ao remover cliente',  data: err});
+    }
 };

@@ -92,13 +92,11 @@ const pessoaSchema = new Schema({
 
 
 const schema = new Schema({
-    cliente: { 
         id: {
             type: Number,
             required: false,
             trim: true
         },
         pessoa: pessoaSchema
-    }
 })
 module.exports = mongoose.model('Cliente', schema);
