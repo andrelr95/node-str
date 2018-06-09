@@ -1,17 +1,19 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Cliente = mongoose.model('Cliente');
-const repository = require('../repositories/cliente-repository');
 
-exports.post = (req, res, next) => {
-    repository.create(req.body)
-        .then(x => {
-            res.status(201).send({message: 'Cliente cadastrado com sucesso'});
-        }).catch(e => {
-            res.status(400).send({message: 'Falha ao cadastrar o cliente', data: e});
-        });
-    };
+const repository = require('../repositories/cliente-repository');
+const pessoaRepository = require('../repositories/pessoa-repository');
+
+
+exports.post = async(req, res, next) => {
+    try{
+        await repository.create(req.body);
+        res.status(201).send({message: 'Cliente cadastrado com sucesso'});
+    } catch(err) {
+        res.status(400).send({message: 'Falha ao cadastrar o cliente', data: err});
+    }
+};
 
 exports.get = async(req, res, next) => {
     try {

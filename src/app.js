@@ -13,6 +13,9 @@ mongoose.connect('mongodb://andrelr:andrelr@ds044907.mlab.com:44907/nodestr');
 
 const Product = require('./models/product');
 const Cliente = require('./models/cliente');
+const Pessoa = require('./models/pessoa');
+const Endereco = require('./models/endereco');
+
 
 // Carrega as rotas
 const indexRoute = require('./routes/index-route');
