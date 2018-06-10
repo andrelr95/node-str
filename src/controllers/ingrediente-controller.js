@@ -1,7 +1,6 @@
 'use strict';
 
 const mongoose = require('mongoose');
-/* const Ingrediente = mongoose.model('Ingrediente'); */
 const repository = require('../repositories/ingrediente-repository');
 
 exports.post = async(req, res, next) => {
@@ -22,14 +21,14 @@ exports.get = async(req, res, next) => {
     }
 };
 
-/* exports.decrementItem = async(req, res, next) => {
+exports.decrementItem = async(req, res, next) => {
     try {
-        await repository.update(req.params.id);
+        await repository.decrementItem(req.params.id);
         res.status(200).send({ message: 'Ingrediente decrementado com sucesso'});
     } catch(err) {
         res.status(400).send({ message: 'Falha ao atualizar ingrediente'}, err);
     }
-}; */
+};
 
 exports.getById = async(req, res, next) => {
     try{

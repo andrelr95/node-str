@@ -5,9 +5,7 @@ const router = express.Router();
 const controllers = require('./../controllers/produto-controller');
 
 router.get('/', controllers.get);
-router.get('/:slug', controllers.getBySlug);
-router.get('/admin/:id', controllers.getById);
-router.get('/tags/:tag', controllers.getByTag);
+router.get('/:id', controllers.getById);
 router.post('/', controllers.post);
 router.put('/:id', controllers.put);
 router.delete('/:id', controllers.delete);

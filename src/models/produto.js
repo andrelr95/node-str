@@ -21,7 +21,11 @@ const schema = new Schema({
     ingredientes: [{
         type: Schema.Types.ObjectId,
         ref: 'Ingrediente'
-    }]
+    }],
+    cliente: {
+        type: Schema.Types.ObjectId,
+        ref: 'Cliente'
+    }
 
 });
 
