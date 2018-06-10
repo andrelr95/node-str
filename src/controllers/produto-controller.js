@@ -1,10 +1,10 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Product = mongoose.model('Product');  
+const Produto = mongoose.model('Produto');  
 
 exports.get = (req, res, next) => {
-    Product.find({active: true}, 'title price slug')
+    Produto.find({active: true}, 'title price slug')
     .then(data => {
         res.status(200).send(data);
     }).catch(e => {
@@ -13,7 +13,7 @@ exports.get = (req, res, next) => {
 };
 
 exports.getBySlug = (req, res, next) => {
-    Product
+    Produto
         .findOne({
             slug: req.params.slug,
             active: true
@@ -26,7 +26,7 @@ exports.getBySlug = (req, res, next) => {
 };
 
 exports.getByTag = (req, res, next) => {
-    Product
+    Produto
         .find({
             tags: req.params.tag,
             active: true
@@ -39,7 +39,7 @@ exports.getByTag = (req, res, next) => {
 };
 
 exports.getById = (req, res, next) => {
-    Product
+    Produto
         .findById(req.params.id, 'title description price slug tags')
     .then(data => {
         res.status(200).send(data);
@@ -49,7 +49,7 @@ exports.getById = (req, res, next) => {
 };
 
 exports.post = (req, res, next) => {
-    var product = new Product(req.body);
+    var product = new Produto(req.body);
     product
         .save()
         .then(x => {
@@ -60,7 +60,7 @@ exports.post = (req, res, next) => {
 };
 
 exports.put = (req, res, next) => {
-    Product.findByIdAndUpdate(req.params.id, {
+    Produto.findByIdAndUpdate(req.params.id, {
         $set: {
             title: req.body.title,
             description: req.body.description,

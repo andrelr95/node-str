@@ -4,21 +4,19 @@ const mongoose = require('mongoose');
 const Cliente = mongoose.model('Cliente');
 const repository = require('../repositories/cliente-repository');
 
-exports.post = (req, res, next) => {
-    repository.create(req.body)
-        .then(x => {
-            res.status(201).send({message: 'Cliente cadastrado com sucesso'});
-        }).catch(e => {
-            res.status(400).send({message: 'Falha ao cadastrar o cliente', data: e});
-        });
-    };
+exports.post = async(req, res, next) => {
+    try {
+        await repository.create(req.body);
+        res.status(201).send({message: 'Cliente cadastrado com sucesso'});     
+    } catch(err) {
+        res.status(400).send({message: 'Falha ao cadastrar o cliente', data: err});
+    }    
+};
 
 exports.get = async(req, res, next) => {
     try {
         let body = await repository.get();
-        let responseBody = new Object();
-        responseBody.clientes = body;
-        res.status(200).send(responseBody);    
+        res.status(200).send(body);    
     } catch(err) {
         res.status(500).send(err);
     }
@@ -27,9 +25,7 @@ exports.get = async(req, res, next) => {
 exports.getById = async(req, res, next) => {
     try{
         let body = await repository.getById(req.params.id);
-        let responseBody = new Object();
-        responseBody.cliente = body;
-        res.status(200).send(responseBody);
+        res.status(200).send(body);
     } catch(err) {
         res.status(404).send(err);
     }

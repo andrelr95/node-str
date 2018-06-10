@@ -5,7 +5,7 @@ const Cliente = mongoose.model('Cliente');
 
 
 exports.get = async() => {
-    const res = await Cliente.find(); 
+    const res = await Cliente.find({}, 'usuario senha role pessoa'); 
     return res;
 }
 
@@ -16,9 +16,7 @@ exports.getById = async(id) => {
 
 exports.update = async(id, body) => {
     const res = await Cliente.findByIdAndUpdate(id, {
-        $set: {
-            pessoa: body    
-        }
+        $set: { pessoa: body }
     });
     return res;
 }
@@ -30,5 +28,5 @@ exports.delete = async(id) => {
 
 exports.create = async(body) => {
     let cliente = new Cliente(body);
-    await cliente.save()
+    await cliente.save();
 }

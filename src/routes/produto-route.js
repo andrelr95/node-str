@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const controllers = require('./../controllers/product-controller');
+const controllers = require('./../controllers/produto-controller');
 
 router.get('/', controllers.get);
 router.get('/:slug', controllers.getBySlug);
