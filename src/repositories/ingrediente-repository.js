@@ -16,12 +16,23 @@ exports.getById = async(id) => {
 
 exports.decrementItem = async(id) => {
     const ingrediente = await Ingrediente.findById(id);
-    const res = await Ingrediente.findByIdAndUpdate(id, {
-        $set: { 
-            qtdeEstoque: ingrediente.qtdeEstoque - 1,
-         }
-    });
-    return res;
+    if(ingrediente.qtdeEstoque > 1){
+        await Ingrediente.findByIdAndUpdate(id, {
+            $set: { 
+                qtdeEstoque: ingrediente.qtdeEstoque - 1,
+                ativo: true
+             }
+        });
+    }else if(ingrediente.qtdeEstoque == 1){
+        await Ingrediente.findByIdAndUpdate(id, {
+            $set: { 
+                qtdeEstoque: ingrediente.qtdeEstoque - 1,
+                ativo: false,
+             }
+        });
+    } else {
+        return;
+    }
 }
 
 exports.update = async(id, body) => {

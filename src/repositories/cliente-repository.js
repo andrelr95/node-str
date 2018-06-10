@@ -16,7 +16,10 @@ exports.getById = async(id) => {
 
 exports.update = async(id, body) => {
     const res = await Cliente.findByIdAndUpdate(id, {
-        $set: { pessoa: body }
+        $set: { 
+            senha: body.senha,
+            pessoa: body.pessoa 
+        }
     });
     return res;
 }
