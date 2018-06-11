@@ -13,20 +13,20 @@ mongoose.connect('mongodb://andrelr:andrelr@ds044907.mlab.com:44907/nodestr');
 
 const Produto = require('./models/produto');
 const Cliente = require('./models/cliente');
-const Ingrediente = require('./models/ingrediente');
+const Estoque = require('./models/estoque');
 
 // Carrega as rotas
 const indexRoute = require('./routes/index-route');
 const produtoRoute = require('./routes/produto-route');
 const clienteRoute = require('./routes/cliente-route');
-const ingredienteRoute = require('./routes/ingrediente-route');
+const estoqueRoute = require('./routes/estoque-route');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/', indexRoute);
 app.use('/produtos', produtoRoute);
 app.use('/clientes', clienteRoute);
-app.use('/ingredientes', ingredienteRoute);
+app.use('/estoque', estoqueRoute);
 
 
 module.exports = app;

@@ -6,12 +6,15 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     descricao: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     preco: {
         type: Number,
         required: true,
+    },
+    tipo: {
+        type: String,
+        required: true
     },
     ativo: {
         type: Boolean,
@@ -20,13 +23,8 @@ const schema = new Schema({
     },
     ingredientes: [{
         type: Schema.Types.ObjectId,
-        ref: 'Ingrediente'
-    }],
-    cliente: {
-        type: Schema.Types.ObjectId,
-        ref: 'Cliente'
-    }
-
+        ref: 'Estoque'
+    }]  
 });
 
 module.exports = mongoose.model('Produto', schema);

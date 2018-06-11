@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const repository = require('../repositories/ingrediente-repository');
+const repository = require('../repositories/estoque-repository');
 const ValidatorContract = require('../validators/fluent-validator');
 
 exports.post = async(req, res, next) => {
@@ -18,7 +18,7 @@ exports.post = async(req, res, next) => {
     
     try {
         await repository.create(req.body);
-        res.status(201).send({message: 'Ingrediente cadastrado com sucesso'});     
+        res.status(201).send({message: 'Item cadastrado com sucesso ao estoque'});     
     } catch(err) {
         res.status(500).send({message: 'Houve uma falha na requisição'});
     }    
@@ -36,11 +36,20 @@ exports.get = async(req, res, next) => {
 exports.decrementItem = async(req, res, next) => {
     try {
         await repository.decrementItem(req.params.id);
-        res.status(200).send({ message: 'Ingrediente decrementado com sucesso'});
+        res.status(200).send({ message: 'Item decrementado com sucesso'});
     } catch(err) {
         res.status(400).send({ message: 'Falha ao atualizar ingrediente'}, err);
     }
 };
+
+exports.getByType = async(req, res, next) => {
+    try{
+        let body = await repository.getByType(req.query.tipo);
+        res.status(200).send(body);
+    }catch(err){
+        res.status(500).send({message: 'Houve um erro na requisição'});
+    }
+}
 
 exports.getById = async(req, res, next) => {
     try{
@@ -68,7 +77,7 @@ exports.put = async(req, res, next) => {
     try{
         /* await repository.decrementItem(req.params.id); */
         await repository.update(req.params.id, req.body);
-        res.status(200).send({ message: 'Ingrediente atualizado com sucesso'});
+        res.status(200).send({ message: 'Item atualizado com sucesso'});
     } catch(err) {
         res.status(400).send({ message: 'Falha ao atualizar ingrediente'}, err);
     }
@@ -77,7 +86,7 @@ exports.put = async(req, res, next) => {
 exports.delete = async(req, res, next) => {
     try{
         await repository.delete(req.params.id);
-        res.status(200).send( { message: 'Ingrediente removido com sucesso'});
+        res.status(200).send( { message: 'Item removido com sucesso'});
     } catch(err) {
         res.status(400).send({message : 'Falha ao remover ingrediente',  data: err});
     }

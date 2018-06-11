@@ -5,12 +5,20 @@ const Produto = mongoose.model('Produto');
 
 
 exports.get = async() => {
-    const res = await Produto.find({}, 'descricao preco ingredientes cliente ativo').populate('ingredientes cliente'); 
+    const res = await Produto.find({}, 'descricao preco ingredientes cliente tipo ativo').populate('ingredientes', 'descricao tipo'); 
     return res;
 }
 
 exports.getById = async(id) => {
     const res = await Produto.findById(id);
+    return res;
+}
+
+exports.getByType = async(tipo) => {
+    const res = await Produto.find({
+        tipo: tipo
+    });
+
     return res;
 }
 

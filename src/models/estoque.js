@@ -13,10 +13,15 @@ const schema = new Schema({
         type: Number,
         required: true
     },
+    tipo: {
+        type: String,
+        required: true,
+        trim: true
+    },
     ativo: {
         type: Boolean,
         required: false
     }
 });
 
-module.exports = mongoose.model('Ingrediente', schema);
+module.exports = mongoose.model('Estoque', schema);
