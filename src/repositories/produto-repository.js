@@ -28,8 +28,8 @@ exports.update = async(id, body) => {
             descricao: body.descricao,
             preco: body.preco,
             ativo: body.ativo,
+            tipo: body.tipo,
             ingredientes: body.ingredientes,
-            cliente: body.cliente
          }
     });
     return res;
