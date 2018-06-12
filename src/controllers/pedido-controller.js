@@ -8,6 +8,7 @@ exports.post = async(req, res, next) => {
         await repository.create(req.body);
         res.status(201).send({message: 'Pedido criado com sucesso'});     
     } catch(err) {
+        console.log(err)
         res.status(400).send({message: 'Falha realizar o pedido', data: err});
     }    
 };

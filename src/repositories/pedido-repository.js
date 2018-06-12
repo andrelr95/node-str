@@ -2,9 +2,24 @@
 
 const mongoose = require('mongoose');
 const Pedido = mongoose.model('Pedido');
+const estoqueRepository = require('./estoque-repository');
+const produtoRepository = require('./produto-repository');
 
 
 exports.create = async(body) => {
+
+    let ids = body.comidas.concat(body.bebidas);
+    console.log(ids.length) 
+    
+    ids.map(id => {
+        produtoRepository.getById(id).then(payload => {
+            payload.ingredientes.map(ingrediente => {
+                estoqueRepository.decrementItem(ingrediente);
+                console.log('Decrementou', ingrediente);
+            })
+        })
+    })
+
     let pedido = new Pedido(body);
     await pedido.save();
 }
@@ -14,9 +29,9 @@ exports.get = async() => {
         .populate('cliente', 'pessoa')
         .populate({
             path: 'comidas',
-            populate: { path: 'ingredientes', select: 'descricao' }
+            populate: { path: 'ingredientes', select: 'descricao tipo ativo' }
         })
-        .populate('bebidas', 'descricao preco'); 
+        .populate('bebidas', 'descricao preco tipo'); 
     return res;
 }
 

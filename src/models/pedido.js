@@ -32,7 +32,7 @@ const schema = new Schema({
     cliente: {
         type: Schema.Types.ObjectId,
         ref: 'Cliente'
-    }  
+    }
 });
 
 module.exports = mongoose.model('Pedido', schema);
