@@ -13,13 +13,23 @@ const schema = new Schema({
         required: true,
     },
     comidas: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Produto'
-    }],
+        quantidade : {
+            type: Number,
+            required: true
+        },
+        item: {
+            type: Schema.Types.ObjectId,
+            ref: 'Produto'
+        }}],
     bebidas: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Produto'
-    }],
+        quantidade : {
+            type: Number,
+            required: true
+        },
+        item: {
+            type: Schema.Types.ObjectId,
+            ref: 'Produto'
+        }}],
     status: {
         type: String,
         required: false,

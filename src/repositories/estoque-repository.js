@@ -22,24 +22,27 @@ exports.getByType = async(tipo) => {
     return res;
 }
 
-exports.decrementItem = async(id) => {
+exports.decrementItem = async(id, quantidade) => {
     const estoque = await Estoque.findById(id);
-    if(estoque.qtdeEstoque > 1){
+    console.log("ESTOQUE> ID: " + id + " Descricao: " + estoque.descricao + " Quantidade Estoque: " + estoque.qtdeEstoque + " Quantidade a retirar: " + quantidade);
+    if(estoque.qtdeEstoque > quantidade){
         await Estoque.findByIdAndUpdate(id, {
             $set: { 
-                qtdeEstoque: estoque.qtdeEstoque - 1,
-                ativo: true
+                qtdeEstoque: estoque.qtdeEstoque - quantidade,
+                ativo: true,
              }
         });
-    }else if(estoque.qtdeEstoque == 1){
+        return "Decrementado";
+    } else if(estoque.qtdeEstoque == quantidade){
         await Estoque.findByIdAndUpdate(id, {
             $set: { 
-                qtdeEstoque: estoque.qtdeEstoque - 1,
+                qtdeEstoque: estoque.qtdeEstoque - quantidade,
                 ativo: false,
              }
         });
+        return "Decrementado";
     } else {
-        return;
+        throw new Error("Itens do estoque faltando");
     }
 }
 

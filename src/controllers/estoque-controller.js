@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const repository = require('../repositories/estoque-repository');
 const ValidatorContract = require('../validators/fluent-validator');
 
-exports.post = async(req, res, next) => {
+exports.post = async({ body, query }, res, next) => {
     let contract = new ValidatorContract();
 
     contract.hasMinLen(req.body.descricao, 2, 'A descrição deve ter pelo menos 2 caracteres');
@@ -15,7 +15,8 @@ exports.post = async(req, res, next) => {
     };
 
     req.body.qtdeEstoque > 0 ? req.body.ativo = true : req.body.ativo = false;
-    
+
+
     try {
         await repository.create(req.body);
         res.status(201).send({message: 'Item cadastrado com sucesso ao estoque'});     
@@ -33,12 +34,13 @@ exports.get = async(req, res, next) => {
     }
 };
 
-exports.decrementItem = async(req, res, next) => {
+exports.decrementItem = async(res, id, quantidade) => {
     try {
-        await repository.decrementItem(req.params.id);
+        await repository.decrementItem(id, quantidade);
         res.status(200).send({ message: 'Item decrementado com sucesso'});
     } catch(err) {
-        res.status(400).send({ message: 'Falha ao atualizar ingrediente'}, err);
+        console.log(err)
+        res.status(400).send({ message: 'Ingredientes faltando, por favor, revise seu estoque'}, err);
     }
 };
 

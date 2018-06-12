@@ -2,26 +2,55 @@
 
 const mongoose = require('mongoose');
 const Pedido = mongoose.model('Pedido');
-const estoqueRepository = require('./estoque-repository');
+const Estoque = mongoose.model('Estoque');
 const produtoRepository = require('./produto-repository');
+
+exports.decrementItem = (id, quantidade) => {
+    const estoque =  Estoque.findById(id);
+    if(estoque.qtdeEstoque > quantidade){
+         Estoque.findByIdAndUpdate(id, {
+            $set: { 
+                qtdeEstoque: estoque.qtdeEstoque - quantidade,
+                ativo: true,
+             }
+        });
+    } else if(estoque.qtdeEstoque == quantidade){
+         Estoque.findByIdAndUpdate(id, {
+            $set: { 
+                qtdeEstoque: estoque.qtdeEstoque - quantidade,
+                ativo: false,
+             }
+        });
+    } else {
+        throw new Error("Itens do estoque faltando");
+    }
+}
 
 
 exports.create = async(body) => {
 
-    let ids = body.comidas.concat(body.bebidas);
-    console.log(ids.length) 
+        console.log(body);
     
-    ids.map(id => {
-        produtoRepository.getById(id).then(payload => {
-            payload.ingredientes.map(ingrediente => {
-                estoqueRepository.decrementItem(ingrediente);
-                console.log('Decrementou', ingrediente);
-            })
-        })
-    })
-
-    let pedido = new Pedido(body);
-    await pedido.save();
+        let comidas = body.comidas;
+        let bebidas = body.bebidas;
+    
+        let produtos = comidas.concat(bebidas);
+    
+        produtos.forEach(async produto => {
+            const payload = await produtoRepository.getById(produto.item)
+            payload.ingredientes.forEach(ingrediente => {
+                try{
+                    this.decrementItem(ingrediente, produto.quantidade)
+                } catch(err) {
+                    console.log("catch: ", err);
+                }
+            });
+        });
+        
+        throw new Error("DEI PQ EU QUIS")
+        
+        let pedido = new Pedido(body);
+        await pedido.save();
 }
 
 exports.get = async() => {
@@ -34,35 +63,3 @@ exports.get = async() => {
         .populate('bebidas', 'descricao preco tipo'); 
     return res;
 }
-
-/* exports.getById = async(id) => {
-    const res = await Pedido.findById(id);
-    return res;
-}
-
-exports.getByType = async(tipo) => {
-    const res = await Pedido.find({
-        tipo: tipo
-    });
-
-    return res;
-}
-
-exports.update = async(id, body) => {
-    const res = await Pedido.findByIdAndUpdate(id, {
-        $set: { 
-            descricao: body.descricao,
-            preco: body.preco,
-            ativo: body.ativo,
-            tipo: body.tipo,
-            ingredientes: body.ingredientes,
-         }
-    });
-    return res;
-}
-
-exports.delete = async(id) => {
-    const res = await Pedido.findByIdAndRemove(id); 
-    return res;
-}
- */
