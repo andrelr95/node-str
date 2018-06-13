@@ -13,11 +13,31 @@ exports.post = async(req, res, next) => {
     }    
 };
 
+exports.getByStatus = async(req, res, next) => {
+    try{
+        let body = await repository.getByStatus(req.query.status);
+        res.status(200).send(body);
+    }catch(err){
+        res.status(500).send({message: 'Houve um erro na requisição'});
+    }
+}
+
 exports.get = async(req, res, next) => {
     try {
         let body = await repository.get();
         res.status(200).send(body);    
     } catch(err) {
+        console.log(err);
         res.status(500).send(err);
     }
 };
+
+exports.getById = async(req, res, next) => {
+    try {
+        let body = await repository.getById(req.params.id);
+        res.status(200).send(body);    
+    } catch(err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}

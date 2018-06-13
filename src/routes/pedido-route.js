@@ -6,9 +6,10 @@ const controllers = require('./../controllers/pedido-controller');
 
 router.get('/', controllers.get);
 router.post('/', controllers.post);
+router.get('/:id', controllers.getById);
+router.get('/pedido/status', controllers.getByStatus);
 
 /* 
-router.get('/:id', controllers.getById);
 router.get('/itens/tipo', controllers.getByType);
 router.put('/:id', controllers.put);
 router.delete('/:id', controllers.delete); */

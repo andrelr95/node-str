@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const repository = require('../repositories/estoque-repository');
 const ValidatorContract = require('../validators/fluent-validator');
 
-exports.post = async({ body, query }, res, next) => {
+exports.post = async(req, res, next) => {
     let contract = new ValidatorContract();
 
     contract.hasMinLen(req.body.descricao, 2, 'A descrição deve ter pelo menos 2 caracteres');
@@ -15,7 +15,6 @@ exports.post = async({ body, query }, res, next) => {
     };
 
     req.body.qtdeEstoque > 0 ? req.body.ativo = true : req.body.ativo = false;
-
 
     try {
         await repository.create(req.body);
