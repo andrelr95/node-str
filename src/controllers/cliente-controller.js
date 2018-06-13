@@ -4,36 +4,7 @@ const mongoose = require('mongoose');
 const Cliente = mongoose.model('Cliente');
 const repository = require('../repositories/cliente-repository');
 const ValidatorContract = require('../validators/fluent-validator');
-const authService = require('./../services/auth-service');
 
-
-
-exports.authenticate = async(req, res, next) => {
-    try {
-        const cliente = await repository.authenticate({
-            usuario: req.body.usuario,
-            senha: req.body.senha
-        });
-
-        if(!cliente){
-            res.status(404).send( {message: 'Usuario ou senha inválidos'});    
-            return;
-        }
-
-        const token = await authService.generateToken({
-            usuario: cliente.usuario, 
-            nome: cliente.pessoa.nome
-        });
-
-        res.status(200).send({
-            token: token,
-            data: cliente
-        });     
-    } catch(err) {
-        console.log(err);
-        res.status(500).send({message: 'Houve um problema na requisição'});
-    }    
-};
 
 
 exports.post = async(req, res, next) => {

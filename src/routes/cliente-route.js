@@ -5,7 +5,6 @@ const router = express.Router();
 const controllers = require('./../controllers/cliente-controller');
 
 router.post('/', controllers.post);
-router.post('/authenticate', controllers.authenticate);
 router.get('/', controllers.get);
 router.get('/:id', controllers.getById);
 router.put('/:id', controllers.put);

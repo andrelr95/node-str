@@ -23,6 +23,8 @@ const produtoRoute = require('./routes/produto-route');
 const pedidoRoute = require('./routes/pedido-route');
 const clienteRoute = require('./routes/cliente-route');
 const estoqueRoute = require('./routes/estoque-route');
+const authenticateRoute = require('./routes/authenticate-route');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -31,6 +33,7 @@ app.use('/produtos', produtoRoute);
 app.use('/clientes', clienteRoute);
 app.use('/estoque', estoqueRoute);
 app.use('/pedidos', pedidoRoute);
+app.use('/authenticate', authenticateRoute);
 
 
 module.exports = app;
