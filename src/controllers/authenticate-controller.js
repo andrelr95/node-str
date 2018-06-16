@@ -15,7 +15,8 @@ exports.authenticate = async(req, res, next) => {
 
         const token = await authService.generateToken({
             usuario: cliente.usuario, 
-            nome: cliente.pessoa.nome
+            nome: cliente.pessoa.nome,
+            roles: cliente.roles
         });
 
         res.status(200).send({

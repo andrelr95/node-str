@@ -90,11 +90,12 @@ const schema = new Schema({
         type: String,
         required: false
     },
-    role: {
+    roles: [{
         type: String,
-        required: false,
-        default: 'cliente'
-    },
+        required: true,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }],
     pessoa: pessoaSchema
 })
 module.exports = mongoose.model('Cliente', schema);

@@ -87,3 +87,34 @@ exports.delete = async(req, res, next) => {
         res.status(400).send({message : 'Falha ao remover cliente',  data: err});
     }
 };
+
+exports.refreshToken = async(req, res, next) => {
+    try {
+        const token = req.body.token || req.query.token || req.headers['x-access-token'];
+        const data = await authService.decodeToken(token);
+
+        const customer = await repository.getById(data.id);
+
+        if (!customer) {
+            res.status(404).send({
+                message: 'Cliente não encontrado'
+            });
+            return;
+        }
+
+        const tokenData = await authService.generateToken({
+            usuario: cliente.usuario, 
+            nome: cliente.pessoa.nome,
+            roles: cliente.roles
+        });
+
+        res.status(201).send({
+            token: token,
+            data: cliente._id
+        });
+    } catch (e) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
+        });
+    }
+};

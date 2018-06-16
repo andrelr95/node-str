@@ -3,15 +3,13 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('./../controllers/pedido-controller');
+const authService = require('./../services/auth-service');
 
-router.get('/', controllers.get);
-router.post('/', controllers.post);
-router.get('/:id', controllers.getById);
-router.get('/pedido/status', controllers.getByStatus);
 
-/* 
-router.get('/itens/tipo', controllers.getByType);
-router.put('/:id', controllers.put);
-router.delete('/:id', controllers.delete); */
+router.get('/', authService.authorize, controllers.get);
+router.post('/', authService.authorize, controllers.post);
+router.get('/:id', authService.authorize, controllers.getById);
+router.get('/pedido/status', authService.authorize, controllers.getByStatus);
+
 
 module.exports = router; 
