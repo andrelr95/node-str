@@ -12,7 +12,7 @@ exports.post = async(req, res, next) => {
     if(!contract.isValid()){
         res.status(400).send(contract.errors()).end();
         return;
-    };
+    }
 
     req.body.qtdeEstoque > 0 ? req.body.ativo = true : req.body.ativo = false;
 
@@ -55,9 +55,11 @@ exports.getByType = async(req, res, next) => {
 exports.getById = async(req, res, next) => {
     try{
         let body = await repository.getById(req.params.id);
+        console.log(body);
+        if(body === null) throw new Error('Recurso não encontrado');
         res.status(200).send(body);
     } catch(err) {
-        res.status(404).send(err);
+        res.status(404).send({ message: err.message });
     }
 };
 
@@ -70,7 +72,7 @@ exports.put = async(req, res, next) => {
     if(!contract.isValid()){
         res.status(400).send(contract.errors()).end();
         return;
-    };
+    }
 
     req.body.qtdeEstoque > 0 ? req.body.ativo = true : req.body.ativo = false;
         
