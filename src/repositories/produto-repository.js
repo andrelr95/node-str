@@ -17,7 +17,7 @@ exports.getById = async(id) => {
 exports.getByType = async(tipo) => {
     const res = await Produto.find({
         tipo: tipo
-    });
+    }, 'descricao preco ingredientes cliente tipo ativo').populate('ingredientes', 'descricao tipo');
 
     return res;
 }
