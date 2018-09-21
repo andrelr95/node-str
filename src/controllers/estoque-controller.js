@@ -26,7 +26,7 @@ exports.post = async(req, res, next) => {
 
 exports.get = async(req, res, next) => {
     try {
-        let body = await repository.get();
+        let body = await repository.get(req.query.descricao);
         res.status(200).send(body);    
     } catch(err) {
         res.status(500).send(err);

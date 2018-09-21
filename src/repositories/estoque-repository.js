@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 const Estoque = mongoose.model('Estoque');
 
 
-exports.get = async() => {
-    const res = await Estoque.find({}, 'descricao qtdeEstoque tipo ativo'); 
+exports.get = async(descricao) => {
+    let res;
+    if(descricao === undefined) res = await Estoque.find({}, 'descricao qtdeEstoque tipo ativo');
+    else res = await Estoque.find({ descricao: { $regex: `^${descricao}`} }, 'descricao qtdeEstoque tipo ativo');
+     
     return res;
 }
 
@@ -23,10 +26,7 @@ exports.getByType = async(tipo) => {
 }
 
 exports.getByDescription = async(descricao) => {
-    const res = await Estoque.find({
-        descricao: { $regex: `^${descricao}`}
-
-    }, 'descricao qtdeEstoque tipo ativo');
+    const res = await Estoque.find({ descricao: { $regex: `^${descricao}`} }, 'descricao qtdeEstoque tipo ativo');
     
     return res;
 }
