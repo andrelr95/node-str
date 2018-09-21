@@ -52,6 +52,15 @@ exports.getByType = async(req, res, next) => {
     }
 }
 
+exports.getByDescription = async(req, res, next) => {
+    try{
+        let body = await repository.getByDescription(req.query.descricao);
+        res.status(200).send(body);
+    }catch(err){
+        res.status(500).send({message: 'Houve um erro na requisição'});
+    }
+}
+
 exports.getById = async(req, res, next) => {
     try{
         let body = await repository.getById(req.params.id);

@@ -22,29 +22,38 @@ exports.getByType = async(tipo) => {
     return res;
 }
 
-exports.decrementItem = async(id, quantidade) => {
-    const estoque = await Estoque.findById(id);
-    console.log("ESTOQUE> ID: " + id + " Descricao: " + estoque.descricao + " Quantidade Estoque: " + estoque.qtdeEstoque + " Quantidade a retirar: " + quantidade);
-    if(estoque.qtdeEstoque > quantidade){
-        await Estoque.findByIdAndUpdate(id, {
-            $set: { 
-                qtdeEstoque: estoque.qtdeEstoque - quantidade,
-                ativo: true,
-             }
-        });
-        return "Decrementado";
-    } else if(estoque.qtdeEstoque == quantidade){
-        await Estoque.findByIdAndUpdate(id, {
-            $set: { 
-                qtdeEstoque: estoque.qtdeEstoque - quantidade,
-                ativo: false,
-             }
-        });
-        return "Decrementado";
-    } else {
-        throw new Error("Itens do estoque faltando");
-    }
+exports.getByDescription = async(descricao) => {
+    const res = await Estoque.find({
+        descricao: { $regex: `^${descricao}`}
+
+    }, 'descricao qtdeEstoque tipo ativo');
+    
+    return res;
 }
+
+// exports.decrementItem = async(id, quantidade) => {
+//     const estoque = await Estoque.findById(id);
+//     console.log("ESTOQUE> ID: " + id + " Descricao: " + estoque.descricao + " Quantidade Estoque: " + estoque.qtdeEstoque + " Quantidade a retirar: " + quantidade);
+//     if(estoque.qtdeEstoque > quantidade){
+//         await Estoque.findByIdAndUpdate(id, {
+//             $set: { 
+//                 qtdeEstoque: estoque.qtdeEstoque - quantidade,
+//                 ativo: true,
+//              }
+//         });
+//         return "Decrementado";
+//     } else if(estoque.qtdeEstoque == quantidade){
+//         await Estoque.findByIdAndUpdate(id, {
+//             $set: { 
+//                 qtdeEstoque: estoque.qtdeEstoque - quantidade,
+//                 ativo: false,
+//              }
+//         });
+//         return "Decrementado";
+//     } else {
+//         throw new Error("Itens do estoque faltando");
+//     }
+// }
 
 exports.update = async(id, body) => {
     const res = await Estoque.findByIdAndUpdate(id, {
