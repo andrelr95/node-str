@@ -4,8 +4,16 @@ const mongoose = require('mongoose');
 const Produto = mongoose.model('Produto');
 
 
-exports.get = async() => {
-    const res = await Produto.find({}, 'descricao preco ingredientes cliente tipo ativo').populate('ingredientes', 'descricao tipo'); 
+exports.get = async(descricao) => {
+    // const res = await Produto.find({}, 'descricao preco ingredientes cliente tipo ativo').populate('ingredientes', 'descricao tipo');
+    let res;
+    if(descricao === undefined) {
+        res = await Produto.find({}, 'descricao preco ingredientes cliente tipo ativo')
+            .populate('ingredientes', 'descricao tipo');
+    } else {
+        res = await Produto.find({ descricao: { $regex: `^${descricao}`} }, 'descricao preco ingredientes cliente tipo ativo')
+        .populate('ingredientes', 'descricao tipo');
+    }
     return res;
 }
 
@@ -19,6 +27,11 @@ exports.getByType = async(tipo) => {
         tipo: tipo
     }, 'descricao preco ingredientes cliente tipo ativo').populate('ingredientes', 'descricao tipo');
 
+    return res;
+}
+
+exports.getByDescription = async(descricao) => {
+    const res = await Produto.find({ descricao: { $regex: `^${descricao}`} }, 'descricao qtdeEstoque tipo ativo');
     return res;
 }
 
