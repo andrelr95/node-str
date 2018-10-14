@@ -13,18 +13,18 @@ exports.post = async(req, res, next) => {
     }    
 };
 
-exports.getByStatus = async(req, res, next) => {
-    try{
-        let body = await repository.getByStatus(req.query.status);
-        res.status(200).send(body);
-    }catch(err){
-        res.status(500).send({message: 'Houve um erro na requisição'});
+exports.put = async(req, res, next) => {
+    try {
+        await repository.update(req.params.id, req.body);
+        res.status(200).send( { message: 'Pedido atualizado com sucesso' } );
+    } catch(err) {
+        res.status(400).send( { message: 'Falha ao atualizar o pedido', data: err } );
     }
 }
 
 exports.get = async(req, res, next) => {
     try {
-        let body = await repository.get();
+        let body = await repository.get(req.query);
         res.status(200).send(body);    
     } catch(err) {
         console.log(err);

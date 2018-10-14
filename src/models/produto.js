@@ -23,7 +23,8 @@ const schema = new Schema({
     },
     ingredientes: [{
         type: Schema.Types.ObjectId,
-        ref: 'Estoque'
+        ref: 'Estoque',
+        required: false
     }]  
 });
 

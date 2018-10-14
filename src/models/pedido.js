@@ -33,7 +33,7 @@ const schema = new Schema({
     status: {
         type: String,
         required: false,
-        default: 'Criado'
+        default: 'criado'
     },
     mensagem: {
         type: String,

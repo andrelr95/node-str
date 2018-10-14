@@ -32,10 +32,8 @@ exports.decrementItem = async(id, quantidade) => {
 
 
 exports.create = async(body) => {
-
         let comidas = body.comidas;
         let bebidas = body.bebidas;
-    
         let errors = [];
 
         let produtos = comidas.concat(bebidas);
@@ -56,17 +54,49 @@ exports.create = async(body) => {
         await pedido.save();
 }
 
-exports.get = async() => {
-    const res = await Pedido.find()
-        .populate('cliente', 'pessoa')
-        .populate({
-            path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
-            populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
-        .populate({
-            path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
-            populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
-        }); 
-    return res;
+exports.update = async(id, body) => {
+    console.log(body)
+    return await Pedido.findByIdAndUpdate(id, {
+        $set: { 
+            status: body.status 
+        }
+    });
+}
+
+exports.get = async(query) => {
+    console.log(query)
+
+    if(query.status){
+        console.log(query.status);
+    } else if(query.cliente) {
+        console.log(query.cliente);
+    } else {
+
+        console.log("DEFAULTO")
+    }
+
+    // if(query.status === undefined) {
+    //    return await Pedido.find()
+    //    .populate('cliente', 'pessoa')
+    //    .populate({
+    //        path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
+    //        populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
+    //    .populate({
+    //        path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
+    //        populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
+    //    }); 
+    // } else {
+    //     return await Pedido.find({
+    //         status: status
+    //     })
+    //     .populate('cliente', 'pessoa')
+    //     .populate({
+    //         path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
+    //         populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
+    //     .populate({
+    //         path: 'bebidas.item', select: 'ativo descricao preco tipo'
+    //     }); 
+    // }
 }
 
 exports.getById = async(id) => {
@@ -82,18 +112,4 @@ exports.getById = async(id) => {
     return res;
 }
 
-exports.getByStatus = async(status) => {
-    const res = await Pedido.find({
-        status: status
-    })
-    .populate('cliente', 'pessoa')
-    .populate({
-        path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
-        populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
-    .populate({
-        path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
-        populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
-    }); 
-    
-    return res;
-}
+
