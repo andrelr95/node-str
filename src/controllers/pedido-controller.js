@@ -23,14 +23,29 @@ exports.put = async(req, res, next) => {
 }
 
 exports.get = async(req, res, next) => {
+    const status = req.query.status;
+    const cliente = req.query.cliente;
+    let body;
     try {
-        let body = await repository.get(req.query);
+        if(cliente === undefined && status === undefined) body = await repository.get(); 
+        else if (cliente === undefined) body = await repository.getPedidosByStatus(status);
+        else body = await repository.getPedidosByStatusAndCliente(status, cliente);
         res.status(200).send(body);    
     } catch(err) {
         console.log(err);
         res.status(500).send(err);
     }
 };
+
+// exports.getPedidosByCliente = async(req, res, next) => {
+//     try{
+//         let body = await repository.getPedidosByCliente(req.params.pedido, req.params.cliente);
+//         res.status(200).send(body);
+//     } catch(err) {
+//         console.log(err);
+//         res.status(500).send(err);
+//     }
+// }
 
 exports.getById = async(req, res, next) => {
     try {

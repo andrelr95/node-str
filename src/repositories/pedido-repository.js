@@ -63,41 +63,47 @@ exports.update = async(id, body) => {
     });
 }
 
-exports.get = async(query) => {
-    console.log(query)
+exports.get = async() => {
+       return await Pedido.find()
+       .populate('cliente', 'pessoa')
+       .populate({
+           path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
+           populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
+       .populate({
+           path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
+           populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
+       }); 
+   }
 
-    if(query.status){
-        console.log(query.status);
-    } else if(query.cliente) {
-        console.log(query.cliente);
-    } else {
-
-        console.log("DEFAULTO")
-    }
-
-    // if(query.status === undefined) {
-    //    return await Pedido.find()
-    //    .populate('cliente', 'pessoa')
-    //    .populate({
-    //        path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
-    //        populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
-    //    .populate({
-    //        path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
-    //        populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
-    //    }); 
-    // } else {
-    //     return await Pedido.find({
-    //         status: status
-    //     })
-    //     .populate('cliente', 'pessoa')
-    //     .populate({
-    //         path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
-    //         populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
-    //     .populate({
-    //         path: 'bebidas.item', select: 'ativo descricao preco tipo'
-    //     }); 
-    // }
+exports.getPedidosByStatus = async(status) => {
+    return await Pedido.find({
+        status: status,
+    })
+    .populate('cliente', 'pessoa')
+    .populate({
+        path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
+        populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
+    .populate({
+        path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
+        populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
+    });
 }
+
+exports.getPedidosByStatusAndCliente = async(status, cliente) => {
+    return await Pedido.find({
+        status: status,
+        cliente: cliente
+    })
+    .populate('cliente', 'pessoa')
+    .populate({
+        path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
+        populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
+    .populate({
+        path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
+        populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
+    }); 
+}
+
 
 exports.getById = async(id) => {
     const res = await Pedido.findById(id)
