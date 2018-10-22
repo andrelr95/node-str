@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     numero: {
         type: String,
-        required: true
+        required: false
     },
     precoTotal: {
         type: Number,

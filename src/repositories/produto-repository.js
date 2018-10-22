@@ -9,10 +9,10 @@ exports.get = async(descricao) => {
     let res;
     if(descricao === undefined) {
         res = await Produto.find({}, 'descricao preco ingredientes cliente tipo ativo')
-            .populate('ingredientes', 'descricao tipo');
+            .populate('ingredientes', 'descricao tipo ativo');
     } else {
         res = await Produto.find({ descricao: { $regex: `^${descricao}`} }, 'descricao preco ingredientes cliente tipo ativo')
-        .populate('ingredientes', 'descricao tipo');
+        .populate('ingredientes', 'descricao tipo ativo');
     }
     return res;
 }
@@ -25,7 +25,7 @@ exports.getById = async(id) => {
 exports.getByType = async(tipo) => {
     const res = await Produto.find({
         tipo: tipo
-    }, 'descricao preco ingredientes cliente tipo ativo').populate('ingredientes', 'descricao tipo');
+    }, 'descricao preco ingredientes cliente tipo ativo').populate('ingredientes', 'descricao tipo ativo');
 
     return res;
 }

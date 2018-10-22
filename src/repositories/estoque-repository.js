@@ -17,9 +17,10 @@ exports.getById = async(id) => {
     return res;
 }
 
-exports.getByType = async(tipo) => {
+exports.getByType = async(tipo, ativo) => {
     const res = await Estoque.find({
-        tipo: tipo
+        tipo: tipo,
+        ativo: ativo
     }, 'descricao qtdeEstoque tipo ativo');
 
     return res;

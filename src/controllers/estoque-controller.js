@@ -45,7 +45,7 @@ exports.decrementItem = async(res, id, quantidade) => {
 
 exports.getByType = async(req, res, next) => {
     try{
-        let body = await repository.getByType(req.query.tipo);
+        let body = await repository.getByType(req.query.tipo, req.query.ativo);
         res.status(200).send(body);
     }catch(err){
         res.status(500).send({message: 'Houve um erro na requisição'});
