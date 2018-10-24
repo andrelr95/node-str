@@ -16,7 +16,7 @@ exports.post = async(req, res, next) => {
 exports.put = async(req, res, next) => {
     try {
         await repository.update(req.params.id, req.body);
-        res.status(200).send( { message: 'Pedido atualizado com sucesso' } );
+        res.status(200).send( { message: 'Pedido atualizado com sucesso', data: req.body } );
     } catch(err) {
         res.status(400).send( { message: 'Falha ao atualizar o pedido', data: err } );
     }
