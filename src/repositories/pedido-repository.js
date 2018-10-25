@@ -49,7 +49,8 @@ exports.create = async(body) => {
                 }
             });
         })
-        
+        body['numero'] = `${Math.floor(Math.random()*90000) + 10000}`;
+        console.log(body);
         let pedido = new Pedido(body);
         await pedido.save();
 }
