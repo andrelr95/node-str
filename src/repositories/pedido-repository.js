@@ -90,6 +90,23 @@ exports.getPedidosByStatus = async(status) => {
     });
 }
 
+exports.getPedidosByCliente = async(cliente) => {
+    let pedidos = await Pedido.find({
+        cliente: cliente
+    })    
+    .populate('cliente', 'pessoa')
+    .populate({
+        path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
+        populate: { path: 'ingredientes', select: 'descricao tipo ativo'}})
+    .populate({
+        path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
+        populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
+    });
+    pedidos.forEach((pedido) => pedido.status === 'cancelado' || pedido.status === 'entregue' ? pedido.ativo = false : pedido.ativo = true)
+    return pedidos;
+}
+
+
 exports.getPedidosByStatusAndCliente = async(status, cliente) => {
     return await Pedido.find({
         status: status,

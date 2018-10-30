@@ -35,6 +35,10 @@ const schema = new Schema({
         required: false,
         default: 'criado'
     },
+    ativo: {
+        type: Boolean,
+        required: false
+    },
     mensagem: {
         type: String,
         required: false

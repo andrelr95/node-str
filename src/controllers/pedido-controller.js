@@ -25,10 +25,16 @@ exports.put = async(req, res, next) => {
 exports.get = async(req, res, next) => {
     const status = req.query.status;
     const cliente = req.query.cliente;
+    const ativo = req.query.ativo;
+
     let body;
     try {
         if(cliente === undefined && status === undefined) body = await repository.get(); 
+     
         else if (cliente === undefined) body = await repository.getPedidosByStatus(status);
+     
+        else if(status === undefined) body = await repository.getPedidosByCliente(cliente)
+
         else body = await repository.getPedidosByStatusAndCliente(status, cliente);
         res.status(200).send(body);    
     } catch(err) {
