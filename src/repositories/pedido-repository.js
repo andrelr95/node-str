@@ -50,6 +50,7 @@ exports.create = async(body) => {
             });
         })
         body['numero'] = `${Math.floor(Math.random()*90000) + 10000}`;
+        body['dataPedido'] = new Date();
         console.log(body);
         let pedido = new Pedido(body);
         await pedido.save();

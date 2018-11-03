@@ -8,6 +8,10 @@ const schema = new Schema({
         type: String,
         required: false
     },
+    dataPedido: {
+        type: Date,
+        required: true
+    },
     precoTotal: {
         type: Number,
         required: true,

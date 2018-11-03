@@ -16,6 +16,7 @@ const Produto = require('./models/produto');
 const Cliente = require('./models/cliente');
 const Estoque = require('./models/estoque');
 const Pedido = require('./models/pedido');
+const Faturamento = require('./models/faturamento');
 
 // Carrega as rotas
 const indexRoute = require('./routes/index-route');
@@ -23,6 +24,7 @@ const produtoRoute = require('./routes/produto-route');
 const pedidoRoute = require('./routes/pedido-route');
 const clienteRoute = require('./routes/cliente-route');
 const estoqueRoute = require('./routes/estoque-route');
+const faturamentoRoute = require('./routes/faturamento-route');
 const authenticateRoute = require('./routes/authenticate-route');
 
 app.use(function (req, res, next) {
@@ -39,6 +41,7 @@ app.use('/produtos', produtoRoute);
 app.use('/clientes', clienteRoute);
 app.use('/estoque', estoqueRoute);
 app.use('/pedidos', pedidoRoute);
+app.use('/faturamentos', faturamentoRoute);
 app.use('/authenticate', authenticateRoute);
 
 
