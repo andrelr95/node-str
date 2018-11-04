@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Pedido = mongoose.model('Pedido');
 const Estoque = mongoose.model('Estoque');
 const produtoRepository = require('./produto-repository');
+const faturamentoRepository = require('./faturamento-repository');
 
 
 //TODO REFATORAR VALIDAÇÕES 'ACID' E TRATAMENTO DE ERROS DE ESTOQUE VAZIO AO CRIAR PEDIDO
@@ -54,19 +55,28 @@ exports.create = async(body) => {
         console.log(body);
         let pedido = new Pedido(body);
         await pedido.save();
-}
+}       
 
 exports.update = async(id, body) => {
-    console.log(body)
-    return await Pedido.findByIdAndUpdate(id, {
+    console.log(id)
+    if(body.status === 'entregue') {
+
+        //TODO
+        const date = new Date();
+        const codigo = ( date.getMonth() + 1 ).toString().concat(date.getFullYear().toString());    
+        faturamentoRepository.AddPedidosByCodigo(id, x, codigo);
+    }
+    let pedido = await Pedido.findByIdAndUpdate(id, {
         $set: { 
             status: body.status 
         }
     });
+
+    return pedido;
 }
 
 exports.get = async() => {
-       return await Pedido.find()
+    let pedidos = await Pedido.find()
        .populate('cliente', 'pessoa')
        .populate({
            path: 'comidas.item', select: 'ativo ingrediente descricao preco tipo',
@@ -75,10 +85,12 @@ exports.get = async() => {
            path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
            populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
        }); 
+       pedidos.forEach((pedido) => pedido.status === 'cancelado' || pedido.status === 'entregue' ? pedido.ativo = false : pedido.ativo = true)
+       return pedidos;
    }
 
 exports.getPedidosByStatus = async(status) => {
-    return await Pedido.find({
+    let pedidos =  await Pedido.find({
         status: status,
     })
     .populate('cliente', 'pessoa')
@@ -89,6 +101,8 @@ exports.getPedidosByStatus = async(status) => {
         path: 'bebidas.item', select: 'ativo ingrediente descricao preco tipo',
         populate: { path: 'ingredientes', select: 'descricao tipo ativo' } 
     });
+    pedidos.forEach((pedido) => pedido.status === 'cancelado' || pedido.status === 'entregue' ? pedido.ativo = false : pedido.ativo = true)
+    return pedido;
 }
 
 exports.getPedidosByCliente = async(cliente) => {

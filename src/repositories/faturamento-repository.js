@@ -23,6 +23,6 @@ exports.getFaturamentosByCodigo = async(codigo) => {
     return await Faturamento.findOne({
         codigo: codigo
     }, 'codigo mes ano valorTotal pedidos')
-    .populate('pedidos', 'numero dataPedido precoTotal')
+    .populate('pedidos', 'numero dataPedido precoTotal status')
 }
 

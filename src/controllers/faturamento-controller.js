@@ -6,11 +6,15 @@ const pedidoRepository = require('../repositories/pedido-repository');
 
 exports.getByCodigo = async(req, res, next) => {
     try {
-        let body = await repository.getFaturamentosByCodigo(req.params.codigo)
-        res.status(200).send(body);
+        let body = await repository.getFaturamentosByCodigo(req.params.codigo);
+        if(body === null){
+            res.status(404).send( { message: 'Não existe faturamento deste período' } );
+        } else {
+            res.status(200).send(body);
+        }
     } catch(err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).send( { message: 'Houve um erro interno do servidor' } );
     }
 }
 
