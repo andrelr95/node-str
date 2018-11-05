@@ -59,13 +59,6 @@ exports.create = async(body) => {
 
 exports.update = async(id, body) => {
     console.log(id)
-    if(body.status === 'entregue') {
-
-        //TODO
-        const date = new Date();
-        const codigo = ( date.getMonth() + 1 ).toString().concat(date.getFullYear().toString());    
-        faturamentoRepository.AddPedidosByCodigo(id, x, codigo);
-    }
     let pedido = await Pedido.findByIdAndUpdate(id, {
         $set: { 
             status: body.status 

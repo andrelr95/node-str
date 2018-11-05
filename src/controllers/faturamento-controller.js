@@ -22,15 +22,15 @@ exports.pushPedidosToFaturamento = async(req, res, next) => {
 
     let codigo = req.params.codigo;
     let valorTotal;
-    let pedidoFull;
-    let pedido = req.body.pedido;
+    let pedido;
+    let pedidoCodigo = req.body.pedido;
     
-    await pedidoRepository.getById(pedido)
+    await pedidoRepository.getById(pedidoCodigo)
       .then( async (pedidoResponse) => {
-          pedidoFull = pedidoResponse;
+          pedido = pedidoResponse;
           await repository.getFaturamentosByCodigo(codigo)
             .then((faturamentoResponse) => {
-              valorTotal = faturamentoResponse['valorTotal'] + pedidoFull['precoTotal']; 
+              valorTotal = faturamentoResponse['valorTotal'] + pedido['precoTotal']; 
             })
       })
 
