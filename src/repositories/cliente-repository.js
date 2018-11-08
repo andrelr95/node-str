@@ -8,6 +8,16 @@ exports.get = async() => {
     return res;
 }
 
+exports.getByCpf = async(cpf) => {
+    const res = await Cliente.find(
+        { 
+            'pessoa.cpf': { $regex: `^${cpf}` }
+        },
+        'usuario senha roles pessoa'
+    )
+    return res;
+}
+
 exports.getById = async(id) => {
     const res = await Cliente.findById(id);
     return res;

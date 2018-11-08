@@ -36,8 +36,15 @@ exports.post = async(req, res, next) => {
 };
 
 exports.get = async(req, res, next) => {
+    let body;
+    const cpf = req.query.cpf;
+
     try {
-        let body = await repository.get();
+        if(cpf === undefined){
+            body = await repository.get();
+        } else {
+            body = await repository.getByCpf(cpf);
+        }
         res.status(200).send(body);    
     } catch(err) {
         res.status(500).send(err);
