@@ -49,7 +49,8 @@ const schema = new Schema({
     },
     cliente: {
         type: Schema.Types.ObjectId,
-        ref: 'Cliente'
+        ref: 'Cliente',
+        required: false
     }
 });
 

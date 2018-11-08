@@ -10,6 +10,7 @@ exports.getByCodigo = async(req, res, next) => {
         if(body === null){
             res.status(404).send( { message: 'Não existe faturamento deste período' } );
         } else {
+            body['pedidos'] = body.pedidos.sort((a, b) => { return a.dataPedido - b.dataPedido } ).reverse();
             res.status(200).send(body);
         }
     } catch(err) {
