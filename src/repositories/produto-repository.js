@@ -48,8 +48,22 @@ exports.update = async(id, body) => {
     return res;
 }
 
+exports.updateStatus = async(id, body) => {
+    const res = await Produto.findByIdAndUpdate(id, {
+        $set: {
+            ativo: body.ativo
+        }
+    })
+
+    return res;
+}
+
 exports.delete = async(id) => {
-    const res = await Produto.findByIdAndRemove(id); 
+    const res = await Produto.findByIdAndUpdate(id, {
+        $set: {
+            ativo: false
+        }
+    }); 
     return res;
 }
 

@@ -42,8 +42,13 @@ exports.getById = async(req, res, next) => {
 
 exports.put = async(req, res, next) => {
     try{
-        await repository.update(req.params.id, req.body);
-        res.status(200).send({ message: 'Produto atualizado com sucesso'});
+        if(req.body.descricao) {
+            await repository.update(req.params.id, req.body);
+            res.status(200).send({ message: 'Produto atualizado com sucesso'});            
+        } else {
+            await repository.updateStatus(req.params.id, req.body);
+            res.status(200).send({ message: 'Status do produto atualizado com sucesso'});
+        }
     } catch(err) {
         res.status(400).send({ message: 'Falha ao atualizar produto'}, err);
     }
