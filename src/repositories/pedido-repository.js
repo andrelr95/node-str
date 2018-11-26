@@ -11,24 +11,35 @@ const faturamentoRepository = require('./faturamento-repository');
 
 exports.decrementItem = async(id, quantidade) => {
     const estoque =  await Estoque.findById(id);
-
-    if(estoque.qtdeEstoque < quantidade){
-        return;
-    } else if(estoque.qtdeEstoque == quantidade){
-        await Estoque.findByIdAndUpdate(id, {
+    
+    await Estoque.findByIdAndUpdate(id, 
+        {
             $set: { 
-                qtdeEstoque: estoque.qtdeEstoque - quantidade,
-                ativo: false,
-            }
-        });
-    } else {
-        await Estoque.findByIdAndUpdate(id, {
-           $set: { 
-               qtdeEstoque: estoque.qtdeEstoque - quantidade,
-               ativo: true,
-            }
-       });
-    }
+            qtdeEstoque: estoque.qtdeEstoque - 1,
+        }
+    })
+
+    console.log("DECREMENTANDO ", id);
+
+
+    // if(estoque.qtdeEstoque < quantidade){
+    //     return;
+    // } else if(estoque.qtdeEstoque == quantidade){
+    //     await Estoque.findByIdAndUpdate(id, {
+    //         $set: { 
+    //             qtdeEstoque: estoque.qtdeEstoque - 1,
+    //             ativo: false,
+    //         }
+    //     });
+    // } else {
+    //     await Estoque.findByIdAndUpdate(id, {
+    //        $set: { 
+    //            qtdeEstoque: estoque.qtdeEstoque - 1,
+    //            ativo: true,
+    //         }
+    //    });
+    // }
+    
 }
 
 
@@ -36,14 +47,50 @@ exports.create = async(body) => {
         let comidas = body.comidas;
         let bebidas = body.bebidas;
         let errors = [];
-
         let produtos = comidas.concat(bebidas);
+        
+        // let ingredientes = [];
+
+        // produtos.forEach(async (produto) => {
+            
+        //     let produtoMongo = await produtoRepository.getById(produto.item)
+        //     this.ingredientes.push(produtoMongo.ingredientes);
+        
+        // })
+        // console.log("Ingredientes: ", ingredientes);
+
+        console.log("PRODUTOS: ", produtos);
+        
     
         produtos.forEach(async produto => {
             const payload = await produtoRepository.getById(produto.item)
             payload.ingredientes.forEach(async ingrediente => {
+                console.log("INGREDIENTE: ", ingrediente);
                 try{
-                    await this.decrementItem(ingrediente, produto.quantidade);
+                    console.log("A DECREMENTAR : ", ingrediente);
+                    for(let i = 0; i < produto.quantidade; i++) {
+                        await Estoque.findByIdAndUpdate(ingrediente, 
+                            {
+                                $inc: { 
+                                qtdeEstoque: - 1,
+                            }
+                        })
+
+                        // let estoque = Estoque.findById(ingrediente);
+                        // console.log("QUANTIDADE: ", estoque.descricao);
+                        // if(estoque.qtdeEstoque === 0){
+                        //     console.log("QUANTIDADE: ", estoque.qtdeEstoque)
+                        //     await Estoque.findByIdAndUpdate(ingrediente, 
+                        //         {
+                        //             $set: { 
+                        //             ativo: false,
+                        //         }
+                        //     }) 
+                        // }
+                        
+                    }
+                    console.log("DECREMENTOU : ", ingrediente);
+
                 } catch(err) {
                     console.log(err);
                     errors.push(err);
@@ -52,7 +99,6 @@ exports.create = async(body) => {
         })
         body['numero'] = `${Math.floor(Math.random()*90000) + 10000}`;
         body['dataPedido'] = new Date();
-        console.log(body);
         let pedido = new Pedido(body);
         await pedido.save();
 }       
