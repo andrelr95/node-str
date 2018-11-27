@@ -48,16 +48,14 @@ exports.create = async(body) => {
         let bebidas = body.bebidas;
         let errors = [];
         let produtos = comidas.concat(bebidas);
-        
-        // let ingredientes = [];
+        let lastPedido = await Pedido.findOne({}).sort( { numero: -1 } );
+        let numeroPedido = 1;
 
-        // produtos.forEach(async (produto) => {
-            
-        //     let produtoMongo = await produtoRepository.getById(produto.item)
-        //     this.ingredientes.push(produtoMongo.ingredientes);
-        
-        // })
-        // console.log("Ingredientes: ", ingredientes);
+        // console.log("ULTIMO PEDIDO", lastPedido);
+        if(lastPedido !== null){ 
+            numeroPedido = Number(lastPedido.numero) + 1;
+            console.log(numeroPedido);
+        } 
 
         console.log("PRODUTOS: ", produtos);
         
@@ -75,19 +73,6 @@ exports.create = async(body) => {
                                 qtdeEstoque: - 1,
                             }
                         })
-
-                        // let estoque = Estoque.findById(ingrediente);
-                        // console.log("QUANTIDADE: ", estoque.descricao);
-                        // if(estoque.qtdeEstoque === 0){
-                        //     console.log("QUANTIDADE: ", estoque.qtdeEstoque)
-                        //     await Estoque.findByIdAndUpdate(ingrediente, 
-                        //         {
-                        //             $set: { 
-                        //             ativo: false,
-                        //         }
-                        //     }) 
-                        // }
-                        
                     }
                     console.log("DECREMENTOU : ", ingrediente);
 
@@ -97,7 +82,9 @@ exports.create = async(body) => {
                 }
             });
         })
-        body['numero'] = `${Math.floor(Math.random()*90000) + 10000}`;
+
+        // body['numero'] = `${Math.floor(Math.random()*90000) + 10000}`;
+        body['numero'] = numeroPedido;        
         body['dataPedido'] = new Date();
         let pedido = new Pedido(body);
         await pedido.save();

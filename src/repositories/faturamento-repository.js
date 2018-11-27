@@ -8,6 +8,30 @@ exports.create = async(body) => {
     await faturamento.save();
 }
 
+exports.createFromDate = async(pedido, valorTotal) => {
+    const objDate = new Date();
+    const locale = 'pt-br';
+    
+    let fullMonth = objDate.toLocaleString(locale, { month: "long" }).toString();
+    console.log(fullMonth);
+    let month = (objDate.getMonth() + 1).toString();
+    let year = objDate.getFullYear().toString();
+    let codigo = month.concat(year);
+    let pedidos = [pedido];
+
+    let body = new Object({});
+    
+    body.codigo = codigo;
+    body.mes = objDate.toLocaleString(locale, { month: "long" }).toString();;
+    body.ano = year;
+    body.valorTotal = valorTotal;
+    body.pedidos = pedidos;
+
+    console.log(body);
+    let faturamento = new Faturamento(body);
+    await faturamento.save();
+}
+
 exports.AddPedidosByCodigo = async(pedido, valorTotal, codigo) => {
 
     return await Faturamento.findOneAndUpdate(

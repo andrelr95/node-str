@@ -17,28 +17,33 @@ exports.post = async(req, res, next) => {
 exports.put = async(req, res, next) => {
     const pedidoCodigo = req.params.id;
     const status = req.body.status;
+    const date = new Date();
+    const codigo = ( date.getMonth() + 1 ).toString().concat(date.getFullYear().toString());
+    let faturamento = await faturamentoRepository.getFaturamentosByCodigo(codigo);
+    let pedido; 
+    let valorTotal;
 
     try {
         if(status === 'entregue') {
-            const date = new Date();
-            const codigo = ( date.getMonth() + 1 ).toString().concat(date.getFullYear().toString());    
-            let pedido; 
-            let valorTotal;
-            console.log("STEP 1");
-
+            console.log("STEP 1 - RECUPERAR PEDIDOS");
             await repository.getById(pedidoCodigo)
-            .then( async (pedidoResponse) => {
-                pedido = pedidoResponse;
-                console.log("STEP 2 - PEDIDO");
-                await faturamentoRepository.getFaturamentosByCodigo(codigo)
-                  .then((faturamentoResponse) => {
-                    valorTotal = faturamentoResponse['valorTotal'] + pedido['precoTotal']; 
-                    console.log("STEP 3 - VALOR TOTAL: ", valorTotal);
-                  })
+                .then( async ( pedidoResponse ) => {
+                    pedido = pedidoResponse;
+                    console.log("STEP 2 - PEDIDO");
+                    if(faturamento === null) {
+                        console.log("NÃO EXISTE FATURAMENTO, CRIANDO NOVO...  ", pedidoCodigo, pedido['precoTotal']);
+                        await faturamentoRepository.createFromDate(pedidoCodigo, pedido['precoTotal']);
+                    } else {
+                        console.log("ATUALIZANDO FATURAMENTO!");
+                        await faturamentoRepository.getFaturamentosByCodigo(codigo)
+                            .then((faturamentoResponse) => {
+                                valorTotal = faturamentoResponse['valorTotal'] + pedido['precoTotal']; 
+                            })
+                            console.log(`SUCESSO = ADD PEDIDO TO FATURAMENTO: pedido: ${pedidoCodigo} | valor total: ${valorTotal} | codigo: ${codigo}`);
+                            faturamentoRepository.AddPedidosByCodigo(pedido, valorTotal, codigo);
+                    }
             })
 
-            console.log(`STEP 4 - ADD PEDIDO TO FATURAMENTO: pedido: ${pedidoCodigo} | valor total: ${valorTotal} | codigo: ${codigo}`);
-            faturamentoRepository.AddPedidosByCodigo(pedido, valorTotal, codigo);
         }
 
         await repository.update(req.params.id, req.body);
