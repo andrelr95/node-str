@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const Faturamento = mongoose.model('Faturamento');
+const moment = require('moment');
 
 exports.create = async(body) => {
     let faturamento = new Faturamento(body);
@@ -12,7 +13,8 @@ exports.createFromDate = async(pedido, valorTotal) => {
     const objDate = new Date();
     const locale = 'pt-br';
     
-    let fullMonth = objDate.toLocaleString(locale, { month: "long" }).toString();
+    // let fullMonth = objDate.toLocaleString(locale, { month: "long" }).toString();
+    let fullMonth = moment().format('MMMM');
     console.log(fullMonth);
     let month = (objDate.getMonth() + 1).toString();
     let year = objDate.getFullYear().toString();

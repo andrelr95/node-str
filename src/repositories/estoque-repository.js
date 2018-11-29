@@ -26,10 +26,10 @@ exports.getByType = async(tipo, ativo) => {
     return res;
 }
 
-// exports.getByDescription = async(descricao) => {
-//     const res = await Estoque.find({ descricao: { $regex: `^${descricao}`} }, 'descricao qtdeEstoque tipo ativo');
-//     return res;
-// }
+exports.getByDescription = async(descricao) => {
+    const res = await Estoque.find({ descricao: { $regex: `^${descricao}`} }, 'descricao qtdeEstoque tipo ativo');
+    return res;
+}
 
 exports.update = async(id, body) => {
     const res = await Estoque.findByIdAndUpdate(id, {
