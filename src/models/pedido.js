@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema({
     numero: {
-        type: String,
+        type: Number,
         required: false
     },
     dataPedido: {

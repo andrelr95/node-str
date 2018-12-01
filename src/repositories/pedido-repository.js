@@ -84,7 +84,7 @@ exports.create = async(body) => {
         })
 
         // body['numero'] = `${Math.floor(Math.random()*90000) + 10000}`;
-        body['numero'] = numeroPedido;        
+        body['numero'] = Number(numeroPedido);        
         body['dataPedido'] = new Date();
         let pedido = new Pedido(body);
         await pedido.save();

@@ -14,6 +14,7 @@ exports.createFromDate = async(pedido, valorTotal) => {
     const locale = 'pt-br';
     
     // let fullMonth = objDate.toLocaleString(locale, { month: "long" }).toString();
+    moment.locale(locale);
     let fullMonth = moment().format('MMMM');
     console.log(fullMonth);
     let month = (objDate.getMonth() + 1).toString();
@@ -24,7 +25,7 @@ exports.createFromDate = async(pedido, valorTotal) => {
     let body = new Object({});
     
     body.codigo = codigo;
-    body.mes = objDate.toLocaleString(locale, { month: "long" }).toString();;
+    body.mes = fullMonth;
     body.ano = year;
     body.valorTotal = valorTotal;
     body.pedidos = pedidos;
